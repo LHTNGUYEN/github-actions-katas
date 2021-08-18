@@ -7,27 +7,32 @@ jobs:
     steps:
       - name: checkout-step
         uses: actions/checkout@v2
+      - name: upload repo
+        uses: actions/upload-artifact@v2
+        with:
+          name: code
+          path: .      
   Build:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
     needs: Clone-down
     steps:
+      - name: download artifact for build
+        uses: actions/download-artifact@v2
+        with:
+          name: code
+          path: .      
       - name: build-step
-        run: github-actions-katas/ci/build-app.sh
-     #   run: ci/build-app.sh
+        run: ci/build-app.sh
   Test:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
     needs: Clone-down
     steps:
+      - name: download artifact for test
+        uses: actions/download-artifact@v2
+        with:
+          name: code
+          path: .      
       - name: unittest-step
-        run: github-actions-katas/ci/unit-test-app.sh
-      #  run: ci/unit-test-app.sh
-#  Archive:
-#    steps:
-#      - name: upload repo
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: code
-#          path: .      
-         
+        run: ci/unit-test-app.sh
