@@ -5,9 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
     steps:
-      - uses: actions/checkout@v2
-        name: checkout-step
-      -  run: ci/build-app.sh
-         name: build-step
-      -  run: ci/unit-test-app.sh
-         name: unittest-step
+      - name: checkout-step
+        uses: actions/checkout@v2
+      - name: build-step
+        run: ci/build-app.sh
+      - name: unittest-step
+        run: ci/unit-test-app.sh
+         
