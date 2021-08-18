@@ -27,11 +27,6 @@ jobs:
           path: .      
       - name: build-step
         run: chmod +x ci/build-app.sh && ci/build-app.sh
-      - name: upload build
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          path: .    
   Test:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
@@ -51,7 +46,7 @@ jobs:
       - name: download build artifact for unit test
         uses: actions/download-artifact@v2
         with:
-          name: build
+          name: code
           path: .
       - name: build docker image
         run: chmod +x ci/build-docker.sh && export GIT_COMMIT="GA-$GITHUB_SHA" && ci/build-docker.sh
@@ -64,7 +59,7 @@ jobs:
       - name: download build artifact for unit test
         uses: actions/download-artifact@v2
         with:
-          name: build
+          name: code
           path: .
       - name: component test
         run: chmod +x ci/component-test.sh && export GIT_COMMIT="GA-$GITHUB_SHA" && ci/component-test.sh
