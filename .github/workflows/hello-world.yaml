@@ -7,5 +7,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: checkout-step
-      -  run: ../ci/build-app.sh
+      -  run: ci/build-app.sh
          name: build-step
