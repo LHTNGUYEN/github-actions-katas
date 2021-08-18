@@ -27,6 +27,11 @@ jobs:
           path: .      
       - name: build-step
         run: chmod +x ci/build-app.sh && ci/build-app.sh
+      - name: upload build
+        uses: actions/upload-artifact@v2
+        with:
+          name: code
+          path: .    
   Test:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
