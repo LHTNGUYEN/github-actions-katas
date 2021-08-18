@@ -46,7 +46,6 @@ jobs:
         run: chmod +x  ci/unit-test-app.sh && ci/unit-test-app.sh
   Docker-Image:
     runs-on: ubuntu-latest
-    container: gradle:6-jdk11
     needs: [Build, Test]
     steps:
       - name: download build artifact for unit test
@@ -55,7 +54,7 @@ jobs:
           name: build
           path: .
       - name: build docker image
-        run: chmod +x ci/build-docker.sh &&  export GIT_COMMIT="GA-$GITHUB_SHA" && ci/build-docker.sh
+        run: chmod +x ci/build-docker.sh && export GIT_COMMIT="GA-$GITHUB_SHA" && ci/build-docker.sh
       - name: push docker image
         run: chmod +x ci/push-docker.sh && export GIT_COMMIT="GA-$GITHUB_SHA" && ci/push-docker.sh
   
