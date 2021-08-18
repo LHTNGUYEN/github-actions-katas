@@ -9,3 +9,5 @@ jobs:
         name: checkout-step
       -  run: ci/build-app.sh
          name: build-step
+      -  run: ci/unit-test-app.sh
+         name: unittest-step
