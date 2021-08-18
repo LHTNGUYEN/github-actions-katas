@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: checkout-step
         uses: actions/checkout@v2
-      - name: upload repo
+      - name: upload code
         uses: actions/upload-artifact@v2
         with:
           name: code
@@ -17,22 +17,51 @@ jobs:
     container: gradle:6-jdk11
     needs: Clone-down
     steps:
-      - name: download artifact for build
+      - name: download code artifact for build
         uses: actions/download-artifact@v2
         with:
           name: code
           path: .      
       - name: build-step
         run: chmod +x ci/build-app.sh
+      - name: upload build
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: .    
   Test:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
     needs: Clone-down
     steps:
-      - name: download artifact for test
+      - name: download code artifact for build test
         uses: actions/download-artifact@v2
         with:
           name: code
           path: .      
       - name: unittest-step
         run: chmod +x  ci/unit-test-app.sh
+  Docker-Image:
+    runs-on: ubuntu-latest
+    container: gradle:6-jdk11
+    needs: [Build, Test]
+    steps:
+      - name: download build artifact for unit test
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: .      
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ env.docker_username }}
+          password: ${{ env.docker_password }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: my-org/my-image:latest
+        run: chmod +x ci/build-docker.sh && ci/push-docker.sh && export GIT_COMMIT="GA-$GITHUB_SHA"
+    env:
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
