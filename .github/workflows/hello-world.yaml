@@ -6,7 +6,6 @@ env:
 jobs:
   Clone-down:
     runs-on: ubuntu-latest
-    container: gradle:6-jdk11
     steps:
       - name: checkout-step
         uses: actions/checkout@v2
@@ -17,7 +16,6 @@ jobs:
           path: .      
   Build:
     runs-on: ubuntu-latest
-    container: gradle:6-jdk11
     needs: Clone-down
     steps:
       - name: download code artifact for build
